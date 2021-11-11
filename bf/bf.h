@@ -4,7 +4,8 @@
 #define BF_TAPE_OVERFLOW -3
 #define BF_TAPE_UNDERFLOW -4
 #define BF_PROGRAM_INVALID_INSTRUCTION -5
-#define BF_PROGRAM_LOOP_STOPPED_UNEXPECTED -6
+#define BF_PROGRAM_LOOP_NO_CLOSING_BRACKET -6
+#define BF_PROGRAM_LOOP_NO_OPENING_BRACKET -7
 
 // bf_execute executes the given brainfuck program (zero-terminated string)
 // on the given tape (starting at position 0) of length tape_length

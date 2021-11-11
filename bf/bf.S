@@ -51,7 +51,7 @@ bf_execute:
     mov current_instruction, [program_ptr]
 
     .Lcheck_instruction_null_terminator:
-    cmp al, '\0'
+    cmp current_instruction, 0
     JNE .Lcheck_instruction_increment
         // If we have a null terminator, we end the program by returning 0
 
@@ -59,7 +59,7 @@ bf_execute:
         JMP .Lend
 
     .Lcheck_instruction_increment:
-    cmp al, '>'
+    cmp current_instruction, '>'
     JNE .Lcheck_instruction_decrement
         // Increment the current tape pointer
         add tape_ptr, 1
@@ -77,14 +77,14 @@ bf_execute:
         JMP .Lprogram_loop_end
 
     .Lcheck_instruction_decrement:
-    cmp al, '<'
+    cmp current_instruction, '<'
     JNE .Lcheck_instruction_add
         // Decrement the current tape pointer
         sub tape_ptr, 1
 
         // make sure we didn't underflow the initial tape pointer
         cmp tape_ptr, first_tape
-        JNE .Ltape_ptr_no_underflow
+        JAE .Ltape_ptr_no_underflow
 
             // Underflow
             mov rax, -4 // BF_TAPE_UNDERFLOW
@@ -96,26 +96,27 @@ bf_execute:
         JMP .Lprogram_loop_end
 
     .Lcheck_instruction_add:
-    cmp al, '+'
+    cmp current_instruction, '+'
     JNE .Lcheck_instruction_subtract
         // We want to increment the byte at the current tape pointer
-        add [tape_ptr], 1
+        add byte ptr [tape_ptr], 1
         JMP .Lprogram_loop_end
 
-    cmp al, '-'
+    .Lcheck_instruction_subtract:
+    cmp current_instruction, '-'
     JNE .Lcheck_instruction_open_loop
         // We want to decrement the byte at the current tape pointer
-        sub [tape_ptr], 1
+        sub byte ptr [tape_ptr], 1
         JMP .Lprogram_loop_end
 
     .Lcheck_instruction_open_loop:
-    cmp al, '['
+    cmp current_instruction, '['
     JNE .Lcheck_instruction_close_loop
         // This instruction jumps *behind* the next ']' if 
         // the current byte on the tape is 0
 
         // if the current byte is non-zero, we skip the search
-        cmp [tape_ptr], 0
+        cmp byte ptr [tape_ptr], 0
         JNE .Lprogram_loop_end
 
         // Now we should search the next *matching* bracket ]
@@ -124,23 +125,23 @@ bf_execute:
 
         .Lbrace_close_search_loop_start:
         add program_ptr, 1
-        mov al, [program_ptr]
+        mov current_instruction, [program_ptr]
 
         // check for null terminator
-        cmp al, '\0'
+        cmp current_instruction, '\0'
         JNE .Lbrace_close_loop_check_open
-            mov rax, -6 // BF_PROGRAM_LOOP_STOPPED_UNEXPECTED
+            mov rax, -6 // BF_PROGRAM_LOOP_NO_CLOSING_BRACKET
             JMP .Lend
 
         .Lbrace_close_loop_check_open:
-        cmp al, '['
+        cmp current_instruction, '['
         JNE .Lbrace_close_loop_check_close
             // the brace lvl goes up
             add r11, 1
             JMP .Lbrace_close_search_loop_cond
 
         .Lbrace_close_loop_check_close:
-        cmp al, ']'
+        cmp current_instruction, ']'
         JNE .Lbrace_close_search_loop_cond
             // the brace lvl goes down
             sub r11, 1
@@ -158,9 +159,55 @@ bf_execute:
         JMP .Lprogram_loop_end
 
     .Lcheck_instruction_close_loop:
-    cmp al, ']'
+    cmp current_instruction, ']'
     JNE .Linvalid_instruction
+        // This instructions jumps behind the previous matching '['
+        // if the current cell is non-zero
 
+        // if the tape value is zero, we skip the search
+        cmp byte ptr [tape_ptr], 0
+        JE .Lprogram_loop_end
+
+        // Now we search for the previous matching bracket
+
+        mov r11, 1
+
+        .Lbrace_open_search_loop_start:
+        // At first, we decrement the program pointer
+        sub program_ptr, 1
+
+        // Make sure it's still in range
+        cmp program_ptr, program_start_ptr
+        JAE .Lbrace_open_loop_no_underflow
+            // The program pointer underflowed
+            mov rax, -7 // BF_PROGRAM_LOOP_NO_OPENING_BRACKET
+            JMP .Lend
+
+        .Lbrace_open_loop_no_underflow:
+        // Fetch this instruction
+        mov current_instruction, [program_ptr]
+        // Now we can just compare to ']' and increase the level,
+        // and '[' to decrease, hopefully reaching zero
+
+        .Lbrace_open_loop_check_close:
+        cmp current_instruction, ']'
+        JNE .Lbrace_open_loop_check_open
+            add r11, 1 
+            JMP .Lbrace_open_search_loop_cond
+
+        .Lbrace_open_loop_check_open:
+        cmp current_instruction, '['
+        JNE .Lbrace_open_search_loop_cond
+            sub r11, 1
+            // JMP .Lbrace_open_search_loop_cond 
+
+        .Lbrace_open_search_loop_cond:
+        cmp r11, 0
+        JNE .Lbrace_open_search_loop_start
+
+        // Now we are pointing at a '['
+        // The end of the loop will increase the pointer to once
+        // behind this instruction, putting us where we want
 
         JMP  .Lprogram_loop_end
 
