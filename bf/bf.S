@@ -128,7 +128,7 @@ bf_execute:
         mov current_instruction, [program_ptr]
 
         // check for null terminator
-        cmp current_instruction, '\0'
+        cmp current_instruction, 0
         JNE .Lbrace_close_loop_check_open
             mov rax, -6 // BF_PROGRAM_LOOP_NO_CLOSING_BRACKET
             JMP .Lend

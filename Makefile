@@ -2,11 +2,13 @@ CC=gcc
 
 CFLAGS=-Werror -Wall
 
+INTERPRETER_FILES=main.c bf/errors.c bf/bf.S bf/bf.h
+
 all: abf
-abf: main.c bf/bf.S bf/bf.h
+abf: $(INTERPRETER_FILES)
 	$(CC) $(CFLAGS) -o $@ $^
 
-debug: main.c bf/bf.S bf/bf.h
+debug: $(INTERPRETER_FILES)
 	$(CC) $(CFLAGS) -g -o $@ $^
 
 clean:
