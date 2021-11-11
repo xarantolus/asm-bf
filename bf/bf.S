@@ -214,7 +214,29 @@ bf_execute:
     .Lcheck_instruction_print:
     cmp current_instruction, '.'
     JNE .Lcheck_instruction_read
-        // TODO: Print current char
+        // Print the current char
+
+        // Start a write system call, but make sure we restore our registers afterwards
+        push rax
+        push rdi
+        push rsi
+        push rdx
+
+        // 1 is the number of the write system call
+        mov rax, 1
+        // Destination: write to stdout
+        mov rdi, 1
+        // Buffer: pointer to the string (which is our current tape pointer)
+        mov rsi, tape_ptr 
+        // buffer length/how many bytes to print: 1 because we only want to output one byte
+        mov rdx, 1
+
+        syscall
+
+        pop rdx
+        pop rsi
+        pop rdi
+        pop rax
 
         JMP .Lprogram_loop_end
 
