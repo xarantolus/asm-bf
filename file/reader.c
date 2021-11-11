@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <fcntl.h>
+#include <string.h>
+#include <ctype.h>
+#include <strings.h>
 
 #include "reader.h"
 
@@ -27,6 +30,8 @@ int read_bf_program(const char *file_path, char **destination)
 
     size_t buf_offset = 0;
 
+    size_t buf_len = 0;
+
     while (1)
     {
         size_t read_bytes = fread(buf + buf_offset, sizeof(char), buf_step_size, fp);
@@ -34,6 +39,13 @@ int read_bf_program(const char *file_path, char **destination)
         {
             // null-terminate this string
             buf[buf_offset + read_bytes] = 0;
+            buf_len = buf_offset + read_bytes;
+
+            if (buf_len != strlen(buf))
+            {
+                printf("strlen != buflen");
+            }
+
             break;
         }
 
@@ -64,7 +76,20 @@ int read_bf_program(const char *file_path, char **destination)
         return ERR_FILE_CLOSE_FAIL;
     }
 
-    *destination = buf;
+    // Now we remove trailing spaces from the string (e.g. trailing newlines)
 
+    while (buf_len)
+    {
+        if (!isspace(buf[buf_len - 1]))
+        {
+            break;
+        }
+
+        // Basically move the zero-termination one before the current buffer end, replacing the space/newline character
+        buf_len--;
+        buf[buf_len - 1] = 0;
+    }
+
+    *destination = buf;
     return ERR_SUCCESS;
 }

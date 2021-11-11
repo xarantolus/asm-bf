@@ -2,7 +2,7 @@ CC=gcc
 
 CFLAGS=-Werror -Wall
 
-INTERPRETER_FILES=main.c bf/errors.c bf/bf.S bf/bf.h
+INTERPRETER_FILES=main.c bf/errors.c bf/bf.S bf/bf.h file/reader.c file/errors.c
 
 all: abf
 abf: $(INTERPRETER_FILES)
