@@ -1,11 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "bf.h"
 
-#define formatted_allocation_count 40
-
-char *bf_error_message(int error_code)
+char *bf_execute_error_message(int error_code)
 {
     switch (error_code)
     {
