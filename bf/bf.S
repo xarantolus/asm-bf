@@ -96,8 +96,78 @@ bf_execute:
         JMP .Lprogram_loop_end
 
     .Lcheck_instruction_add:
+    cmp al, '+'
+    JNE .Lcheck_instruction_subtract
+        // We want to increment the byte at the current tape pointer
+        add [tape_ptr], 1
+        JMP .Lprogram_loop_end
+
+    cmp al, '-'
+    JNE .Lcheck_instruction_open_loop
+        // We want to decrement the byte at the current tape pointer
+        sub [tape_ptr], 1
+        JMP .Lprogram_loop_end
+
+    .Lcheck_instruction_open_loop:
+    cmp al, '['
+    JNE .Lcheck_instruction_close_loop
+        // This instruction jumps *behind* the next ']' if 
+        // the current byte on the tape is 0
+
+        // if the current byte is non-zero, we skip the search
+        cmp [tape_ptr], 0
+        JNE .Lprogram_loop_end
+
+        // Now we should search the next *matching* bracket ]
+        // r11 saves the current brace lvl (which is 1 because we just opened a brace)
+        mov r11, 1
+
+        .Lbrace_close_search_loop_start:
+        add program_ptr, 1
+        mov al, [program_ptr]
+
+        // check for null terminator
+        cmp al, '\0'
+        JNE .Lbrace_close_loop_check_open
+            mov rax, -6 // BF_PROGRAM_LOOP_STOPPED_UNEXPECTED
+            JMP .Lend
+
+        .Lbrace_close_loop_check_open:
+        cmp al, '['
+        JNE .Lbrace_close_loop_check_close
+            // the brace lvl goes up
+            add r11, 1
+            JMP .Lbrace_close_search_loop_cond
+
+        .Lbrace_close_loop_check_close:
+        cmp al, ']'
+        JNE .Lbrace_close_search_loop_cond
+            // the brace lvl goes down
+            sub r11, 1
+            //JMP .Lbrace_close_search_loop_cond
+        
+        .Lbrace_close_search_loop_cond:
+        // if we aren't on a lvl of 0, we should continue
+        cmp r11, 0
+        JNE .Lbrace_close_search_loop_start
+
+        // So now we exited the loop.
+        // The program pointer now points to a ']'
+        // When we end the loop below, we will step behind it
+
+        JMP .Lprogram_loop_end
+
+    .Lcheck_instruction_close_loop:
+    cmp al, ']'
+    JNE .Linvalid_instruction
 
 
+        JMP  .Lprogram_loop_end
+
+    .Linvalid_instruction:
+        // If we reach this, the current instruction/byte is invalid
+        mov rax, -5 // BF_PROGRAM_INVALID_INSTRUCTION
+        JMP .Lend
 
     .Lprogram_loop_end:
 
