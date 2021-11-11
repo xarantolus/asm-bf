@@ -243,7 +243,27 @@ bf_execute:
     .Lcheck_instruction_read:
     cmp current_instruction, ','
     JNE .Linvalid_instruction
-        // TODO: read into current char
+        // Read into current char
+        push rax
+        push rdi
+        push rsi
+        push rdx
+
+        // 0 is the number of the read system call
+        mov rax, 0
+        // Source: read from stdin
+        mov rdi, 0
+        // Buffer: pointer to the string to write to (which is our current tape pointer)
+        mov rsi, tape_ptr 
+        // buffer length/how many bytes to read: also one, we only read one byte
+        mov rdx, 1
+
+        syscall
+
+        pop rdx
+        pop rsi
+        pop rdi
+        pop rax
 
         JMP .Lprogram_loop_end
 
