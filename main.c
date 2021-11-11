@@ -124,6 +124,12 @@ int main(int argc, char *const argv[])
         return EXIT_FAILURE;
     }
 
+    if (*program_text == 0)
+    {
+        printf("Error: program text is empty\n");
+        return EXIT_FAILURE;
+    }
+
     // Allocate enough memory for the tape
     uint8_t *tape = calloc(tape_size, sizeof(uint8_t));
     if (tape == NULL)

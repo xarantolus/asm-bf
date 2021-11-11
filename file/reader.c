@@ -5,6 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <strings.h>
+#include <assert.h>
 
 #include "reader.h"
 
@@ -13,10 +14,19 @@
 // It returns 0 on success and a negative value on failure
 int read_bf_program(const char *file_path, char **destination)
 {
-    FILE *fp = fopen(file_path, "r");
-    if (fp == NULL)
+    FILE *fp;
+
+    if (strcmp(file_path, "-") == 0)
     {
-        return ERR_OPEN_FILE;
+        fp = stdin;
+    }
+    else
+    {
+        fp = fopen(file_path, "r");
+        if (fp == NULL)
+        {
+            return ERR_OPEN_FILE;
+        }
     }
 
     // how many bytes to allocate at once
@@ -39,12 +49,10 @@ int read_bf_program(const char *file_path, char **destination)
         {
             // null-terminate this string
             buf[buf_offset + read_bytes] = 0;
+
             buf_len = buf_offset + read_bytes;
 
-            if (buf_len != strlen(buf))
-            {
-                printf("strlen != buflen");
-            }
+            assert(buf_len == strlen(buf));
 
             break;
         }
@@ -76,18 +84,12 @@ int read_bf_program(const char *file_path, char **destination)
         return ERR_FILE_CLOSE_FAIL;
     }
 
-    // Now we remove trailing spaces from the string (e.g. trailing newlines)
-
-    while (buf_len)
+    // Now we remove trailing spaces & newlines from the string, this makes
+    // sure that the interpreter doesn't hit an unknown command when it was just at the end
+    while (buf_len && isspace(buf[buf_len - 1]))
     {
-        if (!isspace(buf[buf_len - 1]))
-        {
-            break;
-        }
-
         // Basically move the zero-termination one before the current buffer end, replacing the space/newline character
-        buf_len--;
-        buf[buf_len - 1] = 0;
+        buf[--buf_len] = 0;
     }
 
     *destination = buf;
