@@ -160,7 +160,7 @@ bf_execute:
 
     .Lcheck_instruction_close_loop:
     cmp current_instruction, ']'
-    JNE .Linvalid_instruction
+    JNE .Lcheck_instruction_print
         // This instructions jumps behind the previous matching '['
         // if the current cell is non-zero
 
@@ -210,6 +210,20 @@ bf_execute:
         // behind this instruction, putting us where we want
 
         JMP  .Lprogram_loop_end
+
+    .Lcheck_instruction_print:
+    cmp current_instruction, '.'
+    JNE .Lcheck_instruction_read
+        // TODO: Print current char
+
+        JMP .Lprogram_loop_end
+
+    .Lcheck_instruction_read:
+    cmp current_instruction, ','
+    JNE .Linvalid_instruction
+        // TODO: read into current char
+
+        JMP .Lprogram_loop_end
 
     .Linvalid_instruction:
         // If we reach this, the current instruction/byte is invalid
