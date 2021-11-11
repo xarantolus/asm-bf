@@ -143,7 +143,7 @@ int main(int argc, char *const argv[])
 
     if (bf_exit != BF_EXIT_SUCCESS)
     {
-        printf("Error: %s (%d)\n", bf_execute_error_message(bf_exit), bf_exit);
+        printf("Error: %s (error code %d)\n", bf_execute_error_message(bf_exit), bf_exit);
         return EXIT_FAILURE;
     }
 
