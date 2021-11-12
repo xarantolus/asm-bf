@@ -27,7 +27,7 @@ void print_usage(int argc, char *const argv[])
     "The FILE argument must point to a file containing a brainfuck program.\n\n"                 \
     "Examples:\n\n"                                                                              \
     "  Execute a program from stdin:\n"                                                          \
-    "    $ echo \"+++++++++++++++++++++++++++++++++.\" | %s -\n\n"                               \
+    "    $ echo \"+++++++++++++++++++++++++++++++++.-----------------------.\" | %s -\n\n"       \
     "  Execute a program from a file:\n"                                                         \
     "    $ %s hello_world.bf\n\n"                                                                \
     "  Execute a program from a file with tape size 1000:\n"                                     \
