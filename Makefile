@@ -2,7 +2,7 @@ CC=gcc
 
 CFLAGS=-Werror -Wall
 
-INTERPRETER_FILES=main.c bf/errors.c bf/bf.S bf/bf.h file/reader.c file/errors.c
+INTERPRETER_FILES=main.c bf/errors.c bf/bf.S bf/bf.h file/reader.c file/errors.c cmdline/options.c
 
 all: abf
 abf: $(INTERPRETER_FILES)
@@ -14,3 +14,5 @@ debug: $(INTERPRETER_FILES)
 clean:
 	rm -f abf
 
+install: abf
+	cp ./abf /usr/bin/abf
