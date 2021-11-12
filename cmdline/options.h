@@ -1,3 +1,5 @@
+#define DEFAULT_TAPE_SIZE 5000
+
 // print_usage prints the usage of the abf program
 void print_usage(int argc, char *const argv[]);
 

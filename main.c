@@ -10,7 +10,7 @@ int main(int argc, char *const argv[])
 {
     int help_flag = 0;
     char *file_name = NULL;
-    unsigned long tape_size = 250;
+    unsigned long tape_size = DEFAULT_TAPE_SIZE;
 
     if (parse_options(argc, argv, &help_flag, &file_name, &tape_size))
     {

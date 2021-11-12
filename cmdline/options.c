@@ -22,7 +22,7 @@ void print_usage(int argc, char *const argv[])
     "Usage: %s [OPTION] FILE\n"                                                                  \
     "%s is a brainfuck interpreter written in Assembly.\n\n"                                     \
     "Options:\n"                                                                                 \
-    "    -s, --tape-size=NUM    The tape size to use (default: 250)\n"                           \
+    "    -s, --tape-size=NUM    The tape size to use (default: %d)\n"                           \
     "                           Change this if your program overflows the default tape size\n\n" \
     "The FILE argument must point to a file containing a brainfuck program.\n\n"                 \
     "Examples:\n\n"                                                                              \
@@ -33,7 +33,7 @@ void print_usage(int argc, char *const argv[])
     "  Execute a program from a file with tape size 1000:\n"                                     \
     "    $ %s -s 1000 large_tape.bf\n"
 
-    printf(USAGE_STRING, program_name, program_name, program_name, program_name, program_name);
+    printf(USAGE_STRING, program_name, program_name, DEFAULT_TAPE_SIZE, program_name, program_name, program_name);
 }
 
 int parse_options(int argc, char *const argv[], int *flag_help_ptr, char **file_name_ptr, unsigned long *tape_size_ptr)

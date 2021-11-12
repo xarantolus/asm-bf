@@ -9,7 +9,7 @@ Usage: abf [OPTION] FILE
 abf is a brainfuck interpreter written in Assembly.
 
 Options:
-    -s, --tape-size=NUM    The tape size to use (default: 250)
+    -s, --tape-size=NUM    The tape size to use (default: 5000)
                            Change this if your program overflows the default tape size
 
 The FILE argument must point to a file containing a brainfuck program.
@@ -51,9 +51,18 @@ Installation should be pretty easy on a normal x86-64 Linux system.
 ### Programs included
 There are some [programs](programs/) included in this repository. You can of course execute them with this interpreter.
 
-| Program name | Description                        | File                                      | Source                                                      |
-| ------------ | ---------------------------------- | ----------------------------------------- | ----------------------------------------------------------- |
-| Hello World  | The typical "Hello World!" program | [hello_world.bf](programs/hello_world.bf) | [Source](https://gist.github.com/kidk/44b8cd699c5879f1084f) |
+| Program name | Description                                | File                                      | Source                                                      |
+| ------------ | ------------------------------------------ | ----------------------------------------- | ----------------------------------------------------------- |
+| Hello World  | The typical "Hello World!" program         | [hello_world.bf](programs/hello_world.bf) | [Source](https://gist.github.com/kidk/44b8cd699c5879f1084f) |
+
+
+### Interesting programs
+
+##### The towers of hanoi
+You can run the program using the following command:
+
+    curl "http://www.clifford.at/bfcpu/hanoi.bf" | tr -d " \n" | abf -
+
 
 ### Code overview
 The interpreter source code can be found in [`bf/bf.S`](bf/bf.S). It directly executes system calls from Assembly and thus does not depend on any libraries to read from stdin/write to stdout.
