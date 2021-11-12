@@ -58,7 +58,7 @@ There are some [programs](programs/) included in this repository. You can of cou
 ### Code overview
 The interpreter source code can be found in [`bf/bf.S`](bf/bf.S). It directly executes system calls from Assembly and thus does not depend on any libraries to read from stdin/write to stdout.
 
-The files in `cmdline` contain the handling of command-line arguments while the `file` directory contains code for reading files to memory.
+The rest of the program (handling command-line arguments, reading input files etc.) is written in C.
 
 ### Memory Safety
 The interpreter does bounds checks to avoid over/underrunning the program string and machine tape (it will show an error message when that happens and terminate safely). 
