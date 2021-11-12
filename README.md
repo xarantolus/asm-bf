@@ -26,11 +26,6 @@ Examples:
     $ abf -s 1000 large_tape.bf
 ```
 
-### Code overview
-The interpreter source code can be found in [`bf/bf.S`](bf/bf.S). It directly executes system calls from Assembly and thus does not depend on any libraries to read from stdin/write to stdout.
-
-The files in `cmdline` contain the handling of command-line arguments while the `file` directory contains code for reading files to memory.
-
 ### Installation
 Installation should be pretty easy on a normal x86-64 Linux system.
 
@@ -59,6 +54,14 @@ There are some [programs](programs/) included in this repository. You can of cou
 | Program name | Description                        | File                                      | Source                                                      |
 | ------------ | ---------------------------------- | ----------------------------------------- | ----------------------------------------------------------- |
 | Hello World  | The typical "Hello World!" program | [hello_world.bf](programs/hello_world.bf) | [Source](https://gist.github.com/kidk/44b8cd699c5879f1084f) |
+
+### Code overview
+The interpreter source code can be found in [`bf/bf.S`](bf/bf.S). It directly executes system calls from Assembly and thus does not depend on any libraries to read from stdin/write to stdout.
+
+The files in `cmdline` contain the handling of command-line arguments while the `file` directory contains code for reading files to memory.
+
+### Memory Safety
+The interpreter does bounds checks to avoid over/underrunning the program string and machine tape (it will show an error message when that happens and terminate safely). 
 
 ### [License](LICENSE)
 The interpreter (meaning all files *except* for those in the `programs` directory) is released under the MIT license.
