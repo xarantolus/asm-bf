@@ -12,7 +12,7 @@ debug: $(INTERPRETER_FILES)
 	$(CC) $(CFLAGS) -g -o $@ $^
 
 clean:
-	rm -f abf
+	rm -f abf debug
 
 install: abf
 	cp ./abf /usr/bin/abf
