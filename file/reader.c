@@ -16,6 +16,7 @@ int read_bf_program(const char *file_path, char **destination)
 {
     FILE *fp;
 
+    // If the file name is '-', we assume the user wants stdin
     if (strcmp(file_path, "-") == 0)
     {
         fp = stdin;
@@ -82,14 +83,6 @@ int read_bf_program(const char *file_path, char **destination)
     {
         free(buf);
         return ERR_FILE_CLOSE_FAIL;
-    }
-
-    // Now we remove trailing spaces & newlines from the string, this makes
-    // sure that the interpreter doesn't hit an unknown command when it was just at the end
-    while (buf_len && isspace(buf[buf_len - 1]))
-    {
-        // Basically move the zero-termination one before the current buffer end, replacing the space/newline character
-        buf[--buf_len] = 0;
     }
 
     *destination = buf;

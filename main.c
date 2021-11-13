@@ -57,12 +57,17 @@ int main(int argc, char *const argv[])
     uint8_t *tape = calloc(tape_size, sizeof(uint8_t));
     if (tape == NULL)
     {
+        free(program_text);
+
         printf("Cannot allocate memory for tape, exiting\n");
         return EXIT_FAILURE;
     }
 
     // Finally, execute the bf program
     int bf_exit = bf_execute(program_text, tape, tape_size);
+
+    free(tape);
+    free(program_text);
 
     if (bf_exit != BF_EXIT_SUCCESS)
     {
