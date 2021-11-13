@@ -23,7 +23,7 @@ Examples:
     $ abf hello_world.bf
 
   Execute a program from a file with tape size 1000:
-    $ abf -s 1000 large_tape.bf
+    $ abf -s 10000 large_tape.bf
 ```
 
 ### Installation
@@ -48,20 +48,14 @@ Installation should be pretty easy on a normal x86-64 Linux system.
     This should output `!` and a new line.
 
 
-### Programs included
-There are some [programs](programs/) included in this repository. You can of course execute them with this interpreter.
-
-| Program name | Description                                | File                                      | Source                                                      |
-| ------------ | ------------------------------------------ | ----------------------------------------- | ----------------------------------------------------------- |
-| Hello World  | The typical "Hello World!" program         | [hello_world.bf](programs/hello_world.bf) | [Source](https://gist.github.com/kidk/44b8cd699c5879f1084f) |
-
-
 ### Interesting programs
+Here are some interesting programs you can run with this interpreter.
 
-##### The towers of hanoi
-You can run the program using the following command:
+| Program name    | Description                                  | Command                                                                                                                                                  | Source                                                      |
+| --------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Hello World     | The typical "Hello World!" program           | <code>curl "https://gist.githubusercontent.com/kidk/44b8cd699c5879f1084f/raw/e7ae1b5be4b5a9f117b2948e5391b6d464327996/hello-world.b" &#124; abf -</code> | [Source](https://gist.github.com/kidk/44b8cd699c5879f1084f) |
+| Towers of Hanoi | Towers of Hanoi visualization | <code>curl "http://www.clifford.at/bfcpu/hanoi.bf" &#124; abf -</code>                                                                                   | [Source](http://www.clifford.at/bfcpu/)                     |
 
-    curl "http://www.clifford.at/bfcpu/hanoi.bf" | tr -d " \n" | abf -
 
 
 ### Code overview
@@ -73,4 +67,4 @@ The rest of the program (handling command-line arguments, reading input files et
 The interpreter does bounds checks to avoid over/underrunning the program string and machine tape (it will show an error message when that happens and terminate safely). 
 
 ### [License](LICENSE)
-The interpreter (meaning all files *except* for those in the `programs` directory) is released under the MIT license.
+This is free as in freedom software. Do whatever you like with it.

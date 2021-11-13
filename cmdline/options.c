@@ -31,7 +31,7 @@ void print_usage(int argc, char *const argv[])
     "  Execute a program from a file:\n"                                                         \
     "    $ %s hello_world.bf\n\n"                                                                \
     "  Execute a program from a file with tape size 1000:\n"                                     \
-    "    $ %s -s 1000 large_tape.bf\n"
+    "    $ %s -s 10000 large_tape.bf\n"
 
     printf(USAGE_STRING, program_name, program_name, DEFAULT_TAPE_SIZE, program_name, program_name, program_name);
 }

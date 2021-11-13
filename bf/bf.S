@@ -242,7 +242,7 @@ bf_execute:
 
     .Lcheck_instruction_read:
     cmp current_instruction, ','
-    JNE .Linvalid_instruction
+    JNE .Lprogram_loop_end
         // Read into current char
         push rax
         push rdi
@@ -265,12 +265,14 @@ bf_execute:
         pop rdi
         pop rax
 
-        JMP .Lprogram_loop_end
+        // This jump is not needed because we would just jump to the next
+        // instruction. I just leave it in here in case something is added
+        // to handle invalid characters in some way, so remember to 
+        // uncomment this when something is added below
+        //JMP .Lprogram_loop_end
 
-    .Linvalid_instruction:
-        // If we reach this, the current instruction/byte is invalid
-        mov rax, -5 // BF_PROGRAM_INVALID_INSTRUCTION
-        JMP .Lend
+    // If we reach this point in the program, the current instruction/byte
+    // is not a valid brainfuck command. We do skip these characters, as often they are just comments
 
     .Lprogram_loop_end:
 
