@@ -20,7 +20,7 @@ Examples:
   Execute a program from a file:
     $ abf hello_world.bf
 
-  Execute a program from a file with tape size 1000:
+  Execute a program from a file with tape size 10000:
     $ abf -s 10000 large_tape.bf
 ```
 
