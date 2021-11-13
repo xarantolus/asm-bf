@@ -1,8 +1,6 @@
 # abf
 abf is a [Brainfuck](https://en.wikipedia.org/wiki/Brainfuck) interpreter written in x86-64 Assembly for Linux.
 
-Additionally, this repository contains some example programs written in Brainfuck.
-
 ### Usage
 ```
 Usage: abf [OPTION] FILE
@@ -51,10 +49,10 @@ Installation should be pretty easy on a normal x86-64 Linux system.
 ### Interesting programs
 Here are some interesting programs you can run with this interpreter.
 
-| Program name    | Description                                  | Command                                                                                                                                                  | Source                                                      |
-| --------------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Hello World     | The typical "Hello World!" program           | <code>curl "https://gist.githubusercontent.com/kidk/44b8cd699c5879f1084f/raw/e7ae1b5be4b5a9f117b2948e5391b6d464327996/hello-world.b" &#124; abf -</code> | [Source](https://gist.github.com/kidk/44b8cd699c5879f1084f) |
-| Towers of Hanoi | Towers of Hanoi visualization | <code>curl "http://www.clifford.at/bfcpu/hanoi.bf" &#124; abf -</code>                                                                                   | [Source](http://www.clifford.at/bfcpu/)                     |
+| Program name    | Description                        | Command                                                                                                                                                  | Source                                                      |
+| --------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Hello World     | The typical "Hello World!" program | <code>curl "https://gist.githubusercontent.com/kidk/44b8cd699c5879f1084f/raw/e7ae1b5be4b5a9f117b2948e5391b6d464327996/hello-world.b" &#124; abf -</code> | [Source](https://gist.github.com/kidk/44b8cd699c5879f1084f) |
+| Towers of Hanoi | Towers of Hanoi visualization      | <code>curl "http://www.clifford.at/bfcpu/hanoi.bf" &#124; abf -</code>                                                                                   | [Source](http://www.clifford.at/bfcpu/)                     |
 
 
 
