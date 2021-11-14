@@ -18,28 +18,30 @@ void print_usage(int argc, char *const argv[])
         program_name = argv[0];
     }
 
-#define USAGE_STRING                                                                             \
-    "Usage: %s [OPTION] FILE\n"                                                                  \
-    "%s is a brainfuck interpreter written in Assembly.\n\n"                                     \
-    "Options:\n"                                                                                 \
-    "    -s, --tape-size=NUM    The tape size to use (default: %d)\n"                            \
-    "                           Change this if your program overflows the default tape size\n\n" \
-    "The FILE argument must point to a file containing a brainfuck program.\n\n"                 \
-    "Examples:\n\n"                                                                              \
-    "  Execute a program from stdin:\n"                                                          \
-    "    $ echo \"+++++++++++++++++++++++++++++++++.-----------------------.\" | %s -\n\n"       \
-    "  Execute a program from a file:\n"                                                         \
-    "    $ %s hello_world.bf\n\n"                                                                \
-    "  Execute a program from a file with tape size 10000:\n"                                    \
+#define USAGE_STRING                                                                           \
+    "Usage: %s [OPTION] FILE\n"                                                                \
+    "%s is a brainfuck interpreter written in Assembly.\n\n"                                   \
+    "Options:\n"                                                                               \
+    "    -s, --tape-size=NUM    The tape size to use (default: %d)\n"                          \
+    "                           Change this if your program overflows the default tape size\n" \
+    "    -v, --verbose          Show timing information\n\n"                                   \
+    "The FILE argument must point to a file containing a brainfuck program.\n\n"               \
+    "Examples:\n\n"                                                                            \
+    "  Execute a program from stdin:\n"                                                        \
+    "    $ echo \"+++++++++++++++++++++++++++++++++.-----------------------.\" | %s -\n\n"     \
+    "  Execute a program from a file:\n"                                                       \
+    "    $ %s hello_world.bf\n\n"                                                              \
+    "  Execute a program from a file with tape size 10000:\n"                                  \
     "    $ %s -s 10000 large_tape.bf\n"
 
     printf(USAGE_STRING, program_name, program_name, DEFAULT_TAPE_SIZE, program_name, program_name, program_name);
 }
 
-int parse_options(int argc, char *const argv[], int *flag_help_ptr, char **file_name_ptr, unsigned long *tape_size_ptr)
+int parse_options(int argc, char *const argv[], int *flag_help_ptr, int *flag_verbose_ptr, char **file_name_ptr, unsigned long *tape_size_ptr)
 {
     struct option long_options[] = {
         {"help", no_argument, NULL, 'h'},
+        {"verbose", no_argument, NULL, 'v'},
         {"tape-size", required_argument, NULL, 's'},
         // According to docs: "Terminate the array with an element containing all zeros."
         // https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Options.html
@@ -50,7 +52,7 @@ int parse_options(int argc, char *const argv[], int *flag_help_ptr, char **file_
     {
         // Options with a ":" after them require an additional parameter, e.g.
         // for -f we require a text that defines the function
-        int opt = getopt_long(argc, argv, "hs:", long_options, 0);
+        int opt = getopt_long(argc, argv, "hvs:", long_options, 0);
         if (opt == -1)
         {
             break;
@@ -66,6 +68,11 @@ int parse_options(int argc, char *const argv[], int *flag_help_ptr, char **file_
         {
             *flag_help_ptr = 1;
             return 0;
+        }
+        case 'v':
+        {
+            *flag_verbose_ptr = 1;
+            break;
         }
         case 's':
         {

@@ -9,6 +9,7 @@ abf is a brainfuck interpreter written in Assembly.
 Options:
     -s, --tape-size=NUM    The tape size to use (default: 5000)
                            Change this if your program overflows the default tape size
+    -v, --verbose          Show timing information
 
 The FILE argument must point to a file containing a brainfuck program.
 

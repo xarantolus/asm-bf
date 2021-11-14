@@ -1,8 +1,8 @@
 CC=gcc
 
-CFLAGS=-Werror -Wall
+CFLAGS=-Werror -Wall -Wextra -Wpedantic -g -std=c11
 
-INTERPRETER_FILES=main.c bf/errors.c bf/bf.S bf/bf.h file/reader.c file/errors.c cmdline/options.c
+INTERPRETER_FILES=main.c bf/errors.c bf/bf.S bf/bf.h file/reader.c file/errors.c cmdline/options.c timing/time.c
 
 all: abf
 abf: $(INTERPRETER_FILES)

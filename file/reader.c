@@ -12,6 +12,9 @@
 // read_bf_program reads a program from the file at file_path and writes
 // the content to a string of which the address is written to destination.
 // It returns 0 on success and a negative value on failure
+// BUG: This method is not perfect. If the input file contains a null byte, the 
+// returned string will also contain that null byte, and other methods will
+// assume the string ends there.
 int read_bf_program(const char *file_path, char **destination)
 {
     FILE *fp;
@@ -41,8 +44,6 @@ int read_bf_program(const char *file_path, char **destination)
 
     size_t buf_offset = 0;
 
-    size_t buf_len = 0;
-
     while (1)
     {
         size_t read_bytes = fread(buf + buf_offset, sizeof(char), buf_step_size, fp);
@@ -50,10 +51,6 @@ int read_bf_program(const char *file_path, char **destination)
         {
             // null-terminate this string
             buf[buf_offset + read_bytes] = 0;
-
-            buf_len = buf_offset + read_bytes;
-
-            assert(buf_len == strlen(buf));
 
             break;
         }
