@@ -12,16 +12,18 @@
 // read_bf_program reads a program from the file at file_path and writes
 // the content to a string of which the address is written to destination.
 // It returns 0 on success and a negative value on failure
-// BUG: This method is not perfect. If the input file contains a null byte, the 
+// BUG: This method is not perfect. If the input file contains a null byte, the
 // returned string will also contain that null byte, and other methods will
 // assume the string ends there.
 int read_bf_program(const char *file_path, char **destination)
 {
     FILE *fp;
+    int is_stdin = 0;
 
     // If the file name is '-', we assume the user wants stdin
     if (strcmp(file_path, "-") == 0)
     {
+        is_stdin = 1;
         fp = stdin;
     }
     else
@@ -39,6 +41,10 @@ int read_bf_program(const char *file_path, char **destination)
     char *buf = calloc(buf_step_size, sizeof(char));
     if (buf == NULL)
     {
+        if (!is_stdin)
+        {
+            fclose(fp);
+        }
         return ERR_ALLOCATE_MEMORY;
     }
 
@@ -61,6 +67,10 @@ int read_bf_program(const char *file_path, char **destination)
         if (temp == NULL)
         {
             free(buf);
+            if (!is_stdin)
+            {
+                fclose(fp);
+            }
             return ERR_ALLOCATE_MEMORY;
         }
         buf = temp;
@@ -69,14 +79,17 @@ int read_bf_program(const char *file_path, char **destination)
     if (!feof(fp))
     {
         // Return value of fclose is ignored intentionally
-        fclose(fp);
+        if (!is_stdin)
+        {
+            fclose(fp);
+        }
         free(buf);
 
         // Something went wrong while reading
         return ERR_FILE_NOT_FULLY_READ;
     }
 
-    if (fclose(fp))
+    if (!is_stdin && fclose(fp))
     {
         free(buf);
         return ERR_FILE_CLOSE_FAIL;
