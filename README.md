@@ -60,6 +60,10 @@ Here are some interesting programs you can run with this interpreter.
 
 You can find more interesting programs on [brainfuck.org](http://www.brainfuck.org/).
 
+And if you want to do something even more interesting, you can  just execute 5MB of random (printable) bytes:
+
+    cat /dev/urandom | tr -cd "[:print:]\n" | head -c $((5<<20)) | abf -v -
+
 ### Code overview
 The interpreter source code can be found in [`bf/bf.S`](bf/bf.S). It directly executes system calls from Assembly and thus does not depend on any libraries to read from stdin/write to stdout. Since output is not buffered and each byte is written individually, writing should be rather slow.
 
