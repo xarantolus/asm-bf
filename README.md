@@ -36,7 +36,7 @@ Installation should be pretty easy on a normal x86-64 Linux system.
     ```shell
     cd asm-bf
     ```
-3. Install 
+3. Install to `/usr/bin/abf`
     ```shell
     sudo make install
     ```

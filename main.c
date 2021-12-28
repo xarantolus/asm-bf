@@ -57,7 +57,7 @@ int main(int argc, char *const argv[])
     }
 
     if (flag_verbose)
-        printf("Took %ldns seconds to read input\n", timediff_ns(read_start, read_end));
+        printf("Took %ldns to read input\n", timediff_ns(read_start, read_end));
 
     if (*program_text == 0)
     {
@@ -88,7 +88,7 @@ int main(int argc, char *const argv[])
     free(program_text);
 
     if (flag_verbose)
-        printf("Took %ldns seconds to execute the program\n", timediff_ns(execute_start, execute_end));
+        printf("Took %ldns to execute the program\n", timediff_ns(execute_start, execute_end));
 
     if (bf_exit != BF_EXIT_SUCCESS)
     {
